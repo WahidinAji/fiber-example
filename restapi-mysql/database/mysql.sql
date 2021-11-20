@@ -1,0 +1,8 @@
+CREATE TABLE employees (
+    id bigint(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name varchar(255) not null,
+    salary decimal(15,2),
+    age int(11) not null,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
