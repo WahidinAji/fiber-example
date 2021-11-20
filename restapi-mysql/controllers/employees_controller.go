@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"database/sql"
-	_ "database/sql"
 	"log"
 	"strconv"
 
