@@ -10,7 +10,8 @@
 # Get All
 * url `http://localhost:3000/api/employees` 
 * Method `GET`
-# Create One `http://localhost:3000/api/employees` 
+# Create One 
+* url `http://localhost:3000/api/employees` 
 * Method `POST` 
 * Body 
 ```json
