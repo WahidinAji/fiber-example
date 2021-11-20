@@ -7,7 +7,9 @@
 
 ## header
 `Content-Type: application/json`
-# Get All `http://localhost:3000/api/employees` Method `GET`
+# Get All
+* url `http://localhost:3000/api/employees` 
+* Method `GET`
 # Create One `http://localhost:3000/api/employees` 
 * Method `POST` 
 * Body 
@@ -18,8 +20,11 @@
     "age": 22
 }
 ```
-# Get By Id `http://localhost:3000/api/employees/1` Method `GET`
-# Update One `http://localhost:3000/api/employees/1`
+# Get By Id 
+* url `http://localhost:3000/api/employees/1` 
+* Method `GET`
+# Update One 
+* url`http://localhost:3000/api/employees/1`
 * Method `PUT` 
 * Body 
 ```json
@@ -29,4 +34,6 @@
     "age": 25
 }
 ```
-# Delete One `http://localhost:3000/api/employees/1` Method `DELETE`
+# Delete One 
+* url `http://localhost:3000/api/employees/1` 
+* Method `DELETE`
