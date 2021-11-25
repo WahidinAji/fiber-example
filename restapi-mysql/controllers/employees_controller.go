@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"database/sql"
 	"log"
 	"strconv"
 
@@ -13,7 +12,8 @@ import (
 
 func GetAll(ctx *fiber.Ctx) error {
 	//Get Employee list from database
-	rows, err := database.Db.Query("SELECT id, name, salary, age FROM employees order by id")
+	sql := "SELECT id, name, salary, age FROM employees order by id"
+	rows, err := database.Db.QueryContext(ctx.Context(), sql)
 
 	if err != nil {
 		return ctx.Status(500).SendString(err.Error())
@@ -65,11 +65,6 @@ func GetAll(ctx *fiber.Ctx) error {
 }
 
 func CreateEmployee(ctx *fiber.Ctx) error {
-	rows, err := database.Db.Query("SELECT id FROM Employees ORDER BY id DESC LIMIT 1")
-	if err != nil {
-		return ctx.Status(500).SendString(err.Error())
-	}
-	defer rows.Close()
 	//new employee struct
 	newEmployee := new(models.Employee)
 
@@ -77,24 +72,27 @@ func CreateEmployee(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(newEmployee); err != nil {
 		return ctx.Status(503).SendString(err.Error())
 	}
-	for rows.Next() {
-		employee := models.Employee{}
-		if err := rows.Scan(&employee.Id); err != nil {
-			return err // Exit if we get an error
-		}
-		// log.Println(employee)
-		// Append Employee to Employees
-		newEmployee.Id = employee.Id +1
-	}
+	// for rows.Next() {
+	// 	employee := models.Employee{}
+	// 	if err := rows.Scan(&employee.Id); err != nil {
+	// 		return err // Exit if we get an error
+	// 	}
+	// 	// log.Println(employee)
+	// 	// Append Employee to Employees
+	// 	newEmployee.Id = employee.Id +1
+	// }
 
 	//update Employee record in db
-	response, err := database.Db.Query("INSERT INTO employees (ID, NAME, SALARY, AGE) VALUES (?, ?, ?, ?)", newEmployee.Id, newEmployee.Name, newEmployee.Salary, newEmployee.Age)
+	sql := "INSERT INTO employees (ID, NAME, SALARY, AGE) VALUES (?, ?, ?, ?)"
+	response, err := database.Db.ExecContext(ctx.Context(),sql, newEmployee.Id, newEmployee.Name, newEmployee.Salary, newEmployee.Age)
 	if err != nil {
 		return err
 	}
-
-	defer response.Close()
-	
+	id, err := response.LastInsertId()
+	if err != nil {
+		return err
+	}
+	newEmployee.Id = int(id)
 	//print result
 	return helpers.ResponseJson(ctx, 201, "Created Successfuly!!", true, newEmployee)
 }
@@ -104,7 +102,8 @@ func GetById(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	rows, err := database.Db.Query("SELECT id, name, salary, age FROM employees WHERE id = ?", id)
+	sql := "SELECT id, name, salary, age FROM employees WHERE id = ?"
+	rows, err := database.Db.QueryContext(ctx.Context(), sql, id)
 	if err != nil {
 		return ctx.Status(500).SendString(err.Error())
 	}
@@ -125,34 +124,6 @@ func GetById(ctx *fiber.Ctx) error {
 	}
 }
 
-//belum
-func UpdateEmployee2(ctx *fiber.Ctx) error {
-	id, err := ctx.ParamsInt("id")
-	if err != nil {
-		return err
-	}
-	// tx, err := database.Db.Begin()
-	tx, err := database.Db.BeginTx(ctx.Context(), &sql.TxOptions{Isolation: sql.LevelLinearizable})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	response, execErr := tx.Exec("UPDATE employees SET name=?,salary=?,age=? WHERE id = ?", "paid", id)
-	if execErr != nil {
-		rollbackErr := tx.Rollback()
-		if rollbackErr != nil{
-			// log.Fatalf("update failed: %v, unable to rollback: %v\n", execErr, rollbackErr)
-			return helpers.ResponseJson(ctx,500, rollbackErr.Error(), false, []models.Employees{})
-		}
-		// log.Fatalf("update failed: %v", execErr)
-		return helpers.ResponseJson(ctx,500, execErr.Error(), false, []models.Employees{})
-	}
-	if err := tx.Commit(); err != nil {
-		log.Fatal(err)
-	}
-	return helpers.ResponseJson(ctx,200,"ok",true,response)
-}
-
 func UpdateEmployee(ctx *fiber.Ctx) error {
 	id, err := ctx.ParamsInt("id")
 	if err != nil {
@@ -163,7 +134,8 @@ func UpdateEmployee(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(employee); err != nil {
 		return ctx.Status(400).SendString(err.Error())
 	}
-	response, err := database.Db.Exec("UPDATE employees SET name=?,salary=?,age=? WHERE id = ?",employee.Name,employee.Salary,employee.Age,id)
+	sql := "UPDATE employees SET name=?,salary=?,age=? WHERE id = ?"
+	response, err := database.Db.ExecContext(ctx.Context(),sql,employee.Name,employee.Salary,employee.Age,id)
 	if err != nil {
 		return err
 	}
@@ -174,6 +146,7 @@ func UpdateEmployee(ctx *fiber.Ctx) error {
 	if rows != 1 {
 		return helpers.ResponseJson(ctx,404, strconv.Itoa(int(rows)) + " Data was not found",true,[]models.Employees{})
 	}
+	employee.Id = id
 	return helpers.ResponseJson(ctx,200,"Updated success!!!",true,employee)
 }
 
@@ -182,8 +155,8 @@ func DeleteEmployee(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	
-	res, err := database.Db.Exec("DELETE FROM employees WHERE id=?", id)
+	sql := "DELETE FROM employees WHERE id=?"
+	res, err := database.Db.ExecContext(ctx.Context(), sql, id)
 	if err != nil {
 		log.Fatal(err)
 	}
