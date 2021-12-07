@@ -164,7 +164,7 @@ func DeleteEmployee(ctx *fiber.Ctx) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if rows != 1 {
+	if rows == 0 {
 		return helpers.ResponseJson(ctx,404,strconv.Itoa(int(rows)) + " Data was not found",true,[]models.Employees{})
 		// log.Fatalf("expected to affect 1 row, affected %d", rows)
 	}
