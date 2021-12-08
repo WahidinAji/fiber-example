@@ -1,4 +1,4 @@
-@baseUrl = https://127.0.0.1:8080/api
+@baseUrl = https://127.0.0.1:3000/api
 # @GET ALL BOOKS
 GET  {{baseUrl}}/books HTTP/1.1
 
