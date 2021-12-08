@@ -9,7 +9,8 @@ https://127.0.0.1:8080/api
     "Content-Type": "application/json"
 }
 ```
-## GET
+## Get all data
+* method `GET`
 * url
 ```bash
 {@base}/api/books
@@ -30,7 +31,8 @@ https://127.0.0.1:8080/api
 }
 ```
 
-## POST
+## Create one data
+* method `POST`
 * url
 ```bash
 {@base}/api/books
@@ -57,7 +59,8 @@ https://127.0.0.1:8080/api
 }
 ```
 
-## GET BY ID
+## Get by id data
+* method `GET`
 * url must have parameter => id
 ```bash
 {@base}/api/books/{bookId}
@@ -76,7 +79,8 @@ https://127.0.0.1:8080/api
 }
 ```
 
-## UPDATE BY ID
+## Update by id database
+* method `PUT`
 * url must have parameter => id
 ```bash
 {@base}/api/books/{bookId}
@@ -102,7 +106,8 @@ https://127.0.0.1:8080/api
 }
 ```
 
-## DELETE BY ID
+## Delete by id data
+* method `DELETE`
 * url must have parameter => id
 ```bash
 {@base}/api/books/{bookId}
