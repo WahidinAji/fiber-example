@@ -1,0 +1,222 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"title": "Simple Rest-API with Fiber using PgSql database",
+		"summary": " A books management",
+		"description": "This is a sample Restfull API for a books management",
+		"version": "1.0.0"
+	},
+	"server": [{
+		"url": "http://127.0.0.1:8080/api"
+	}],
+	"path": {
+		"/books": {
+			"get": {
+				"tags": ["book API"],
+				"description": "List all books",
+				"summary": "List all books",
+				"responses": {
+					"200": {
+						"description": "Success get all books",
+						"content": {
+							"application/json": {
+								"schemas": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"status": {
+											"type": "string"
+										},
+										"data": {
+											"type": "array",
+											"books": {
+												"$ref": "#/components/schemas/Book"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Book API"],
+				"description": "Create new Book",
+				"summary": "Create new Book",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Success Create Book",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"status": {
+											"type": "string"
+										},
+										"data": {
+											"$ref": "#/components/schemas/CreateOrUpdateBook"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/books/{bookId}": {
+      "get": {
+        "tags": ["Book API"],
+        "summary": "Get book by Id",
+        "description": "Get book by Id",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "Book Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get book",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Category"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Book API"],
+        "summary": "Update book by Id",
+        "description": "Update book by Id",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "Book Id"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateBook"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success update book",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Book"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Book API"],
+        "summary": "Delete book by Id",
+        "description": "Delete book by Id",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "Book Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete book",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+	},
+	"components": {
+		"schemas": {
+			"CreateOrUpdateBook": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"Book": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}

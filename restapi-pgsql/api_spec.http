@@ -1,0 +1,29 @@
+@baseUrl = https://127.0.0.1:8080/api
+# @GET ALL BOOKS
+GET  {{baseUrl}}/books HTTP/1.1
+
+# @POST BOOKS
+POST  {{baseUrl}}/books HTTP/1.1
+content-type: application/json
+
+{
+    "author": "Aji Sasongko",
+    "title": "Try to learn go fiber with pgsql",
+    "description":"this description one"
+}
+
+# @GET BY ID BOOKS
+GET  {{baseUrl}}/books/1 HTTP/1.1
+
+# @POST BOOKS
+PUT  {{baseUrl}}/books/1 HTTP/1.1
+content-type: application/json
+
+{
+    "author": "Aji Sasongko Update",
+    "title": "Try to learn go fiber with pgsql",
+    "description":"this description one"
+}
+
+# @ DELETE BY ID BOOKS
+DELETE {{baseUrl}}/books/1 HTTP/1.1
