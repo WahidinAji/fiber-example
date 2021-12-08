@@ -37,7 +37,7 @@ https://127.0.0.1:8080/api
 ```bash
 {@base}/api/books
 ```
-* fomr-data
+* form-data
 ```json
 {
     "author:" : "required 'string' ",
@@ -85,7 +85,7 @@ https://127.0.0.1:8080/api
 ```bash
 {@base}/api/books/{bookId}
 ```
-* fomr-data
+* form-data
 ```json
 {
     "author:" : "required 'string' ",
